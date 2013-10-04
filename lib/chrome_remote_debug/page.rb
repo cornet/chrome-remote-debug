@@ -31,5 +31,14 @@ module ChromeRemoteDebug
       ws.send(JSON.generate(Command.new("Page.navigate", :url => url)))
       ws.close()
     end
+
+    def screenshot
+      ws = ::WebSocket.new(@spec["webSocketDebuggerUrl"])
+      ws.send(JSON.generate(Command.new("Page.captureScreenshot")))
+      screenshot = JSON.parse(ws.receive, :symbolize_names => true)
+      ws.close()
+
+      screenshot
+    end
   end
 end
